@@ -4,7 +4,7 @@
 
 # Задание 0. Вводное.
 
-[![Build Status](https://travis-ci.com/GPGPUCourse/GPGPUTasks2021.svg?branch=task00)](https://travis-ci.com/GPGPUCourse/GPGPUTasks2021)
+[![Build Status](https://app.travis-ci.com/GPGPUCourse/GPGPUTasks2021.svg?branch=task00)](https://app.travis-ci.com/GPGPUCourse/GPGPUTasks2021)
 
 Установка OpenCL-драйвера для процессора
 ========================================
@@ -15,14 +15,14 @@ Windows
 -------
 
 1. Откройте https://software.intel.com/content/www/us/en/develop/tools/opencl-cpu-runtime.html
-2. Скачайте (требует регистрацию, [прямая ссылка для Windows](http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13794/opencl_runtime_18.1_x64_setup.msi))
+2. Скачайте (требует регистрацию, [прямая ссылка для Windows](http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/13794/opencl_runtime_18.1_x64_setup.msi) - если не качает - попробуйте из-под инкогнито или [отсюда](https://disk.yandex.ru/d/dlVbMoI3tsPZfw))
 3. Установите
 
 Linux (Рекомендуется Ubuntu 18.04 или 20.04)
 ----------------------------------
 
 1. Откройте https://software.intel.com/content/www/us/en/develop/tools/opencl-cpu-runtime.html
-2. Скачайте (требует регистрацию, [прямая ссылка для Ubuntu](http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz))
+2. Скачайте (требует регистрацию, [прямая ссылка для Ubuntu](http://registrationcenter-download.intel.com/akdlm/irc_nas/vcp/15532/l_opencl_p_18.1.0.015.tgz) - если не качает - попробуйте из-под инкогнито или [отсюда](https://disk.yandex.ru/d/dlVbMoI3tsPZfw))
 3. ``apt-get install -yq cpio``
 4. ``tar -xzf l_opencl_p_18.1.0.015.tgz``
 5. ``sudo ./l_opencl_p_18.1.0.015/install.sh``
