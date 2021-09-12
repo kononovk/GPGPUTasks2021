@@ -17,4 +17,5 @@ script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=RELWITHDEBINFO ..
   - make -j4
-  - ./enumDevices
+  - cd ..
+  - ./build/aplusb
