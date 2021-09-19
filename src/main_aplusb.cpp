@@ -24,6 +24,20 @@ void raiseFail(const T &a, const T &b, std::string message, std::string filename
 #define EXPECT_THE_SAME(a, b, message) raiseFail(a, b, message, __FILE__, __LINE__)
 
 
+#ifdef CUDA_SUPPORT
+void cuda_aplusb(const gpu::WorkSize &workSize,
+                 const float* a, const float* b, float* c, unsigned int n,
+                 cudaStream_t stream);
+#else
+void cuda_aplusb(const gpu::WorkSize &workSize,
+                 const float* a, const float* b, float* c, unsigned int n,
+                 cudaStream_t stream)
+{
+    throw std::runtime_error("CUDA_SUPPORT=OFF!");
+}
+#endif
+
+
 int main(int argc, char **argv)
 {
     // Это пример использования библиотеки для решения предыдущего задания A+B
@@ -39,10 +53,22 @@ int main(int argc, char **argv)
     // Этот контекст после активации будет прозрачно использоваться при всех вызовах в libgpu библиотеке
     // это достигается использованием thread-local переменных, т.е. на самом деле контекст будет активирован для текущего потока исполнения
     gpu::Context context;
-    context.init(device.device_id_opencl);
+    bool is_cuda;
+#ifdef CUDA_SUPPORT
+    if (device.supports_cuda) {
+        context.init(device.device_id_cuda);
+        is_cuda = true;
+        std::cout << "Using API: CUDA" << std::endl;
+    } else 
+#endif
+    {
+        context.init(device.device_id_opencl);
+        is_cuda = false;
+        std::cout << "Using API: OpenCL" << std::endl;
+    }
     context.activate();
 
-    unsigned int n = 50*1000*1000;
+    unsigned int n = 10*1000*1000;
     std::vector<float> as(n, 0);
     std::vector<float> bs(n, 0);
     std::vector<float> cs(n, 0);
@@ -72,18 +98,24 @@ int main(int argc, char **argv)
     // при компиляции автоматически появится файл src/cl/aplusb_cl.h с массивом aplusb_kernel состоящим из байт исходника
     // т.о. программе не будет нужно в runtime читать файл с диска, т.к. исходник кернелов теперь хранится в массиве данных основной программы
     ocl::Kernel aplusb(aplusb_kernel, aplusb_kernel_length, "aplusb", "-DWORKGROUP_SIZE=" + to_string(workGroupSize));
-    aplusb.compile();
+    if (!is_cuda) {
+        aplusb.compile();
+    }
 
     unsigned int niters = 10;
     timer t;
     for (unsigned int i = 0; i < niters; ++i) {
         unsigned int global_work_size = (n + workGroupSize - 1) / workGroupSize * workGroupSize;
-        aplusb.exec(gpu::WorkSize(workGroupSize, global_work_size),
-                    as_gpu, bs_gpu, cs_gpu, n);
+        gpu::WorkSize workSize(workGroupSize, global_work_size);
+        if (is_cuda) {
+            cuda_aplusb(workSize, as_gpu.cuptr(), bs_gpu.cuptr(), cs_gpu.cuptr(), n, context.cudaStream());
+        } else {
+            aplusb.exec(workSize, as_gpu, bs_gpu, cs_gpu, n);
+        }
         t.nextLap();
     }
     std::cout << "GPU: " << t.lapAvg() << "+-" << t.lapStd() << " s" << std::endl;
-    std::cout << "Reached memory bandwidth: " << ((unsigned int)(3*n*sizeof(float)/t.lapAvg()) >> 20) << " MB/s" << std::endl;
+    std::cout << "Reached memory bandwidth: " << (3.0 * n * sizeof(float) / t.lapAvg() / 1024.0 / 1024.0 / 1024.0) << " GB/s" << std::endl;
 
     cs_gpu.readN(cs.data(), n);
 

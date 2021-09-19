@@ -169,7 +169,7 @@ void OpenCLEngine::init(cl_platform_id platform_id, cl_device_id device_id, cons
 		if (uiNumDevices < 1)
 			throw ocl_exception("No OpenCL devices found");
 
-		std::cout << uiNumDevices << " devices available" << std::endl;
+//		std::cout << uiNumDevices << " devices available" << std::endl;
 
 		std::vector<cl_device_id> devices(uiNumDevices);
 		OCL_SAFE_CALL(clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_GPU, uiNumDevices, devices.data(), NULL));
