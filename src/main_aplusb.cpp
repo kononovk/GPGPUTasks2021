@@ -65,17 +65,25 @@ int main(int argc, char **argv)
     as_gpu.writeN(as.data(), n);
     bs_gpu.writeN(bs.data(), n);
 
+    unsigned int workGroupSize = 128;
+
     // Исходники кернела написаны в src/cl/aplusb.cl
     // Но благодаря convertIntoHeader(src/cl/aplusb.cl src/cl/aplusb_cl.h aplusb_kernel) (см. CMakeLists.txt:18)
     // при компиляции автоматически появится файл src/cl/aplusb_cl.h с массивом aplusb_kernel состоящим из байт исходника
     // т.о. программе не будет нужно в runtime читать файл с диска, т.к. исходник кернелов теперь хранится в массиве данных основной программы
-    ocl::Kernel aplusb(aplusb_kernel, aplusb_kernel_length, "aplusb");
+    ocl::Kernel aplusb(aplusb_kernel, aplusb_kernel_length, "aplusb", "-DWORKGROUP_SIZE=" + to_string(workGroupSize));
     aplusb.compile();
 
-    unsigned int workGroupSize = 128;
-    unsigned int global_work_size = (n + workGroupSize - 1) / workGroupSize * workGroupSize;
-    aplusb.exec(gpu::WorkSize(workGroupSize, global_work_size),
-                as_gpu, bs_gpu, cs_gpu, n);
+    unsigned int niters = 10;
+    timer t;
+    for (unsigned int i = 0; i < niters; ++i) {
+        unsigned int global_work_size = (n + workGroupSize - 1) / workGroupSize * workGroupSize;
+        aplusb.exec(gpu::WorkSize(workGroupSize, global_work_size),
+                    as_gpu, bs_gpu, cs_gpu, n);
+        t.nextLap();
+    }
+    std::cout << "GPU: " << t.lapAvg() << "+-" << t.lapStd() << " s" << std::endl;
+    std::cout << "Reached memory bandwidth: " << ((unsigned int)(3*n*sizeof(float)/t.lapAvg()) >> 20) << " MB/s" << std::endl;
 
     cs_gpu.readN(cs.data(), n);
 

@@ -7,10 +7,17 @@
 #define STATIC_KEYWORD __device__
 #endif
 
+// See https://www.khronos.org/registry/OpenCL/sdk/1.0/docs/man/xhtml/functionQualifiers.html
+#define vec_type_hint(typen)
+#define work_group_size_hint(X, Y, Z)
+#define reqd_work_group_size(X, Y, Z)
+
 #define __kernel __global__
 #define __global
 #define __local __shared__
 #define __constant __constant__
+
+typedef unsigned int uint;
 
 // https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/barrier.html
 enum	cl_mem_fence_flags
@@ -81,10 +88,9 @@ STATIC_KEYWORD uint	get_work_dim()
 #define HOST_CODE
 #endif
 
-#ifdef HOST_CODE
 #include <libgpu/work_size.h>
 #include <libgpu/shared_device_buffer.h>
+#include <libgpu/cuda/utils.h>
 #include <cuda_runtime_api.h>
-#endif
 
 #endif // pragma once

@@ -4,6 +4,7 @@
 
 #line 6
 
+__attribute__((reqd_work_group_size(WORKGROUP_SIZE, 1, 1)))
 __kernel void aplusb(__global const float* a,
                      __global const float* b,
                      __global       float* c,
@@ -13,11 +14,6 @@ __kernel void aplusb(__global const float* a,
 
     if (index >= n)
         return;
-
-    if (index == 0) {
-        // Если бы printf был не под if, то printf попытался бы исполниться для всех запущенных workItems
-        printf("Just example of printf usage: WARP_SIZE=%d\n", WARP_SIZE);
-    }
 
     c[index] = a[index] + b[index];
 }
