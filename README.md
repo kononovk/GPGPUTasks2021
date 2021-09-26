@@ -6,6 +6,7 @@
 - [Задание 1](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task01): A+B.
 - [Задание 2](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task02): Теоретическое задание: параллелизуемость/code divergence/memory coalesced access (сдача через сайт CSC).
 - [Задание 3](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task03): Фрактал Мандельброта. Сумма чисел. Максимальный по сумме префикс.
+- [Задание 4](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task04): Транспонирование матрицы, умножение матриц.
 
 А так же:
 
