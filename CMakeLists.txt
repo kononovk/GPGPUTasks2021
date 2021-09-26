@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 add_subdirectory(libs)
 
-project(task3)
+project(task4)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -23,17 +23,10 @@ convertIntoHeader(src/cl/aplusb.cl src/cl/aplusb_cl.h aplusb_kernel)
 add_executable(aplusb src/main_aplusb.cpp src/cl/aplusb_cl.h)
 target_link_libraries(aplusb libclew libgpu libutils)
 
-# Аналогично для фрактала Мандельброта
-convertIntoHeader(src/cl/mandelbrot.cl src/cl/mandelbrot_cl.h mandelbrot_kernel)
-add_executable(mandelbrot src/main_mandelbrot.cpp src/cl/mandelbrot_cl.h)
-target_link_libraries(mandelbrot libclew libgpu libimages libutils)
+convertIntoHeader(src/cl/matrix_transpose.cl src/cl/matrix_transpose_cl.h matrix_transpose)
+add_executable(matrix_transpose src/main_matrix_transpose.cpp src/cl/matrix_transpose_cl.h)
+target_link_libraries(matrix_transpose libclew libgpu libutils)
 
-# Для вычисления суммы
-convertIntoHeader(src/cl/sum.cl src/cl/sum_cl.h sum_kernel)
-add_executable(sum src/main_sum.cpp src/cl/sum_cl.h)
-target_link_libraries(sum libclew libgpu libutils)
-
-# Для вычисления максимального по сумме префикса
-convertIntoHeader(src/cl/max_prefix_sum.cl src/cl/max_prefix_sum_cl.h max_prefix_sum_kernel)
-add_executable(max_prefix_sum src/main_max_prefix_sum.cpp src/cl/max_prefix_sum_cl.h)
-target_link_libraries(max_prefix_sum libclew libgpu libutils)
+convertIntoHeader(src/cl/matrix_multiplication.cl src/cl/matrix_multiplication_cl.h matrix_multiplication)
+add_executable(matrix_multiplication src/main_matrix_multiplication.cpp src/cl/matrix_multiplication_cl.h)
+target_link_libraries(matrix_multiplication libclew libgpu libutils)
