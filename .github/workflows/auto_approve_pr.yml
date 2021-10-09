@@ -1,0 +1,7 @@
+- name: Auto Approve
+  # You may pin to the exact commit or the version.
+  # uses: hmarr/auto-approve-action@5d04a5ca6da9aeb8ca9f31a5239b96fc3e003029
+  uses: hmarr/auto-approve-action@v2.1.0
+  with:
+    # The GITHUB_TOKEN secret
+    github-token: ${{ secrets.PAT }} # The GitHub Token to use. Must be a personal access token with the repo scope. Project repo->Settings->Secrets->New secret: PAT=...
