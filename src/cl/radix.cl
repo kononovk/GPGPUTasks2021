@@ -1,4 +1,3 @@
-__kernel void radix(__global unsigned int* as)
-{
+__kernel void radix(__global unsigned int *as) {
     // TODO
 }
