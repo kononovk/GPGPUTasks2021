@@ -1,4 +1,4 @@
-# How to use git hooks for this repository:
+# How to use git hooks for automatic formatting:
 
 * Set `.githooks` directory as root directory for git hooks:
 
