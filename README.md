@@ -4,7 +4,7 @@
 
 # Задание 3. Фрактал Мандельброта. Сумма чисел. Максимальный по сумме префикс.
 
-[![Build Status](https://app.travis-ci.com/GPGPUCourse/GPGPUTasks2021.svg?branch=task03)](https://app.travis-ci.com/GPGPUCourse/GPGPUTasks2021)
+[![Build Status](https://github.com/GPGPUCourse/GPGPUTasks2021/actions/workflows/cmake.yml/badge.svg?branch=task03&event=push)](https://github.com/GPGPUCourse/GPGPUTasks2021/actions/workflows/cmake.yml)
 
 0. Сделать fork проекта
 1. Выполнить задания 3.0, 3.1, 3.2 и 3.3 ниже
