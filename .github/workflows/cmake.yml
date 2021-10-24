@@ -32,10 +32,6 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ./aplusb
 
-    - name: bitonic
+    - name: merge
       working-directory: ${{github.workspace}}/build
-      run: ./bitonic
-
-    - name: radix
-      working-directory: ${{github.workspace}}/build
-      run: ./radix
+      run: ./merge
