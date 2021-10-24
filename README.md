@@ -9,6 +9,7 @@
 - [Задание 4](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task04): Транспонирование матрицы, умножение матриц.
 - [Задание 42](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task42): Система непересекающихся множеств и барьеры (необязательное, теоретическое).
 - [Задание 5](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task05): Bitonic sort, radix sort.
+- [Задание 6](https://github.com/GPGPUCourse/GPGPUTasks2021/tree/task06): Merge sort.
 
 А так же:
 
