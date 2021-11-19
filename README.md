@@ -48,16 +48,40 @@ __kernel do_some_work()
     // assert(get_group_size() == [256, 1, 1]);
 
     __local disjoint_set = ...;
+    __local int writers = 0;
+    __local int readers = 0;
+
+    barrier(CLK_LOCAL_MEM_FENCE); // ждем инициализации counter
 
     for (int iters = 0; iters < 100; ++iters) { // потоки делают сто итераций
-        if (some_random_predicat(...)) { // предикат этого потока, он срабатывает очень редко (например шанс - 0.1%)
-            ...                          // т.е. на каждой итерации некоторые потоки (может быть ноль, один, два или вообще все)
-            union(disjoint_set, ...);    // могут захотеть обновить нашу структурку
+        if (some_random_predicat(...)) {        // предикат этого потока, он срабатывает очень редко (например шанс - 0.1%)
+            ...                                 // т.е. на каждой итерации некоторые потоки (может быть ноль, один, два или вообще все)
+            while(true) {
+                if (atomic_cmpxchg(&writers, 0, 1) != 0) { // не получилось заблокироваться
+                    continue;
+                }
+                if (atomic_load(&readers) != 0) {
+                    atomic_store(&writers, 0);
+                    continue;
+                }
+                union(disjoint_set, ...);       // могут захотеть обновить нашу структурку
+                atomic_store(&writers, 0);
+                break;
+            }
             ...
         }
-        ...
-        tmp = get(disjoint_set, ...); // потоки постоянно хотят читать из структурки
-        ...
+        
+        while (true) {
+            atomic_add(&readers, 1);
+            if (atomic_load(&writers) == 1) {
+                atomic_sub(&readers, 1);
+                continue;
+            }
+            ...
+            tmp = get(disjoint_set, ...); // потоки постоянно хотят читать из структурки
+            ...
+            atomic_sub(&readers, 1);
+        }
     }
 }
 ```
